@@ -70,11 +70,11 @@ class DataProxyFile::Impl {
     auto descriptor =
         arrow::flight::FlightDescriptor::Command(any.SerializeAsString());
 
-    SPDLOG_INFO("DownloadFile step 3");
+    SPDLOG_INFO("DownloadFile step 3, {}", descriptor.SerializeAsString());
     auto stream_reader = dp_conn_->DoGet(descriptor);
 
     // 4. 从读取流下载数据
-    SPDLOG_INFO("DownloadFile step 4");
+    SPDLOG_INFO("DownloadFile step 4", );
     auto write_options = BuildWriteOptions(info);
     std::unique_ptr<FileHelpWrite> file_write =
         FileHelpWrite::Make(file_format, file_path, write_options);

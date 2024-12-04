@@ -18,6 +18,8 @@
 
 #include "dataproxy_sdk/cc/exception.h"
 
+#include "spdlog/spdlog.h"
+
 namespace dataproxy_sdk {
 
 class DataProxyConn::Impl {
@@ -66,21 +68,27 @@ class DataProxyConn::Impl {
 
   std::unique_ptr<FlightStreamReaderWrapper> DoGet(
       const arrow::flight::FlightDescriptor& descriptor) {
+    SPDLOG_INFO("DoGet 1, {}", descriptor.SerializeAsString());
     GetFlightInfoResult result = GetFlightInfo(descriptor);
 
+    SPDLOG_INFO("DoGet 2, {}, {}", result.dp_info, result.dp_client);
     std::unique_ptr<arrow::flight::FlightClient> dp_client =
         std::move(result.dp_client);
     std::unique_ptr<arrow::flight::FlightStreamReader> stream_reader;
+    SPDLOG_INFO("DoGet 3");
     if (dp_client) {
+      SPDLOG_INFO("DoGet dp_client if");
       ASSIGN_ARROW_OR_THROW(
           stream_reader,
           dp_client->DoGet(result.dp_info->endpoints().front().ticket));
     } else {
+      SPDLOG_INFO("DoGet dp_client else");
       ASSIGN_ARROW_OR_THROW(
           stream_reader,
           dm_client_->DoGet(result.dp_info->endpoints().front().ticket));
     }
 
+    SPDLOG_INFO("DoGet end");
     return std::make_unique<FlightStreamReaderWrapper>(std::move(stream_reader),
                                                        std::move(dp_client));
   }
