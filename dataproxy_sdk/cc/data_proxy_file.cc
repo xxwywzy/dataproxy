@@ -62,8 +62,8 @@ class DataProxyFile::Impl {
                     const std::string &file_path,
                     proto::FileFormat file_format) {
     // 1. 从dm获取dp信息
-    SPDLOG_INFO("DownloadFile step 1 {}", any.SerializeAsString());
     auto any = BuildDownloadAny(info, file_format);
+    SPDLOG_INFO("DownloadFile step 1 {}", any.SerializeAsString());
 
     // 2. 连接dp
     SPDLOG_INFO("DownloadFile step 2");
