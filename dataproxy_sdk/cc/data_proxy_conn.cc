@@ -71,7 +71,7 @@ class DataProxyConn::Impl {
     SPDLOG_INFO("DoGet 1");
     GetFlightInfoResult result = GetFlightInfo(descriptor);
 
-    SPDLOG_INFO("DoGet 2 ticket, {}", result.dp_info->endpoints().front().ticket.SerializeToString());
+    SPDLOG_INFO("DoGet 2");
     std::unique_ptr<arrow::flight::FlightClient> dp_client =
         std::move(result.dp_client);
     std::unique_ptr<arrow::flight::FlightStreamReader> stream_reader;
