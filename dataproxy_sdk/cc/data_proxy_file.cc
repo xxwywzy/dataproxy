@@ -96,6 +96,7 @@ class DataProxyFile::Impl {
       file_write->DoWrite(record_batch);
     }
 
+    SPDLOG_INFO("DownloadFile step 7");
     file_write->DoClose();
   }
 
