@@ -20,8 +20,6 @@
 
 #include "spdlog/spdlog.h"
 
-#include <arrow/api.h>
-
 namespace dataproxy_sdk {
 
 class DataProxyConn::Impl {
@@ -73,9 +71,8 @@ class DataProxyConn::Impl {
     SPDLOG_INFO("DoGet 1");
     GetFlightInfoResult result = GetFlightInfo(descriptor);
 
-    std::string serialized_ticket;
-    result.dp_info->endpoints().front().ticket.SerializeToString(&serialized_ticket);
-    SPDLOG_INFO("DoGet 2 ticket {}", serialized_ticket);
+    auto serialized_ticket_result = result.dp_info->endpoints().front().ticket.SerializeToString();
+    SPDLOG_INFO("DoGet 2 ticket {}", serialized_ticket_result.ValueOrDie());
     std::unique_ptr<arrow::flight::FlightClient> dp_client =
         std::move(result.dp_client);
     std::unique_ptr<arrow::flight::FlightStreamReader> stream_reader;
