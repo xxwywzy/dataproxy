@@ -68,7 +68,7 @@ class DataProxyConn::Impl {
 
   std::unique_ptr<FlightStreamReaderWrapper> DoGet(
       const arrow::flight::FlightDescriptor& descriptor) {
-    SPDLOG_INFO("DoGet 1, {}", descriptor);
+    SPDLOG_INFO("DoGet 1");
     GetFlightInfoResult result = GetFlightInfo(descriptor);
 
     SPDLOG_INFO("DoGet 2 ticket, {}", result.dp_info->endpoints().front().ticket);
