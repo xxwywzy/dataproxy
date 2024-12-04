@@ -70,7 +70,7 @@ class DataProxyFile::Impl {
     auto descriptor =
         arrow::flight::FlightDescriptor::Command(any.SerializeAsString());
 
-    SPDLOG_INFO("DownloadFile step 3, {}", descriptor.SerializeAsString());
+    SPDLOG_INFO("DownloadFile step 3, {}", descriptor);
     auto stream_reader = dp_conn_->DoGet(descriptor);
 
     // 4. 从读取流下载数据
