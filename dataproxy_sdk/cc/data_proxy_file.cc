@@ -62,23 +62,31 @@ class DataProxyFile::Impl {
                     const std::string &file_path,
                     proto::FileFormat file_format) {
     // 1. 从dm获取dp信息
+    SPDLOG_INFO("DownloadFile step 1");
     auto any = BuildDownloadAny(info, file_format);
 
     // 2. 连接dp
+    SPDLOG_INFO("DownloadFile step 2");
     auto descriptor =
         arrow::flight::FlightDescriptor::Command(any.SerializeAsString());
-    auto stream_reader = dp_conn_->DoGet(descriptor);
-    // 4. 从读取流下载数据
 
+    SPDLOG_INFO("DownloadFile step 3");
+    auto stream_reader = dp_conn_->DoGet(descriptor);
+
+    // 4. 从读取流下载数据
+    SPDLOG_INFO("DownloadFile step 4");
     auto write_options = BuildWriteOptions(info);
     std::unique_ptr<FileHelpWrite> file_write =
         FileHelpWrite::Make(file_format, file_path, write_options);
+
     // 当没有数据传输时，需要生成具有schema信息的文件
+    SPDLOG_INFO("DownloadFile step 5");
     std::shared_ptr<arrow::RecordBatch> empty_batch;
     ASSIGN_ARROW_OR_THROW(
         empty_batch, arrow::RecordBatch::MakeEmpty(stream_reader->GetSchema()));
     file_write->DoWrite(empty_batch);
 
+    SPDLOG_INFO("DownloadFile step 6");
     while (true) {
       auto record_batch = stream_reader->ReadRecordBatch();
       if (record_batch == nullptr) {
