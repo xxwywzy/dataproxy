@@ -62,7 +62,7 @@ class DataProxyFile::Impl {
                     const std::string &file_path,
                     proto::FileFormat file_format) {
     // 1. 从dm获取dp信息
-    SPDLOG_INFO("DownloadFile step 1");
+    SPDLOG_INFO("DownloadFile step 1 {}", any.SerializeAsString());
     auto any = BuildDownloadAny(info, file_format);
 
     // 2. 连接dp
@@ -70,11 +70,11 @@ class DataProxyFile::Impl {
     auto descriptor =
         arrow::flight::FlightDescriptor::Command(any.SerializeAsString());
 
-    SPDLOG_INFO("DownloadFile step 3, {}", descriptor);
+    SPDLOG_INFO("DownloadFile step 3");
     auto stream_reader = dp_conn_->DoGet(descriptor);
 
     // 4. 从读取流下载数据
-    SPDLOG_INFO("DownloadFile step 4", );
+    SPDLOG_INFO("DownloadFile step 4");
     auto write_options = BuildWriteOptions(info);
     std::unique_ptr<FileHelpWrite> file_write =
         FileHelpWrite::Make(file_format, file_path, write_options);
